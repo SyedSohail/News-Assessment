@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build:
+      context: ./ # This should be the root folder where Dockerfile is located
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/app  # Map the correct folder
+      - /usr/src/app/node_modules  # Avoid overwriting node_modules
+    command: npm start
+    environment:
+      - CHOKIDAR_USEPOLLING=true
