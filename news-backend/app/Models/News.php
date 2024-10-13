@@ -17,15 +17,19 @@ class News extends Model
         'author',
         'image_url',
         'published_at',
+        'category_id'
     ];
 
-    // Optionally, you can define a mutator for published_at if you need to format it
     protected $dates = [
         'published_at',
     ];
 
-    // If you want to cast any attributes, you can do it here
     protected $casts = [
         'published_at' => 'datetime',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

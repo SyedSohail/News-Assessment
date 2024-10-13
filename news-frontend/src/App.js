@@ -7,7 +7,8 @@ import { Container } from '@mui/material';
 import NewsList from './components/NewsList';
 import NewsItem from './components/NewsItem';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import PrivateRoute from './routes/PrivateRoute'; // Import PrivateRoute
+import PrivateRoute from './routes/PrivateRoute';
+import PublicRoute from './routes/PublicRoute';
 
 const theme = createTheme();
 
@@ -18,8 +19,22 @@ function App() {
         <Router>
           <Container>
             <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route 
+                path="/" 
+                element={
+                  <PublicRoute>
+                    <Login />
+                  </PublicRoute>
+                } 
+              />
+              <Route 
+                path="/register" 
+                element={
+                  <PublicRoute>
+                    <Register />
+                  </PublicRoute>
+                } 
+              />
               <Route 
                 path="/newsList" 
                 element={

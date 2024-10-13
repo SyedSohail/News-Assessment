@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import api from './../api';
+import api from '../api';
+import { AuthContext } from '../context/AuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
 
   const handleLogout = async () => {
     try {
       await api.post('/logout');
+      logout();
+      localStorage.removeItem('user');
       localStorage.removeItem('token');
       navigate('/');
     } catch (error) {

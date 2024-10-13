@@ -10,17 +10,17 @@ class StoreUserRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // Set to true if you don't have specific authorization logic
+        return true;
     }
 
     public function rules()
-    {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-        ];
-    }
+{
+    return [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|string|min:8',
+    ];
+}
 
     public function messages()
     {
@@ -40,10 +40,8 @@ class StoreUserRequest extends FormRequest
             function (Validator $validator) {
                 if (count($validator->errors()) > 0) {
                     throw new HttpResponseException(response()->json([
-                        'success'   => false,
-                        'message'   => 'Validation errors',
-                        'data'      => $validator->errors()
-                    ]));
+                        'errors'      => $validator->errors()
+                    ], 422));
                 }
             }
         ];

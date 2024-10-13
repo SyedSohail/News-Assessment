@@ -3,7 +3,7 @@ import { TextField, Button, InputAdornment, IconButton, Box, Typography, Alert }
 import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-import api from './../api';
+import api from '../api';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
@@ -22,12 +22,13 @@ const Login = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setSubmitting(true);
+    setErrorMessage('');
     try {
       const response = await api.post('/login', values);
       localStorage.setItem('token', response.data.token);
       login(response.data.user);
       navigate('/newsList');
-    } catch {
+    } catch (error) {
       setErrorMessage('Invalid email or password. Please try again.');
     } finally {
       setSubmitting(false);

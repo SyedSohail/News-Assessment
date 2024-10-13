@@ -15,8 +15,8 @@ class CreateNewsTable extends Migration
             $table->string('url')->unique();
             $table->string('source');
             $table->string('author')->nullable();
-            $table->string('image_url')->nullable(); // For storing image URLs
-            $table->timestamp('published_at')->nullable(); // To store published date
+            $table->string('image_url')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }

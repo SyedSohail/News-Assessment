@@ -13,5 +13,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/fetchAndStoreNews', [NewsController::class, 'fetchAndStoreNews']);
     Route::get('/news', [NewsController::class, 'getNews']);
     Route::get('/newsitem/{id}', [NewsController::class, 'show']);
+    Route::get('/categories', [NewsController::class, 'getCategories']);
 
 });

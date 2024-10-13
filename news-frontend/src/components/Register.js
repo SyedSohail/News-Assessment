@@ -3,7 +3,7 @@ import { TextField, Button, InputAdornment, IconButton, Box, Typography, Alert }
 import { Email, Lock, Visibility, VisibilityOff, Person } from '@mui/icons-material';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-import api from './../api'; 
+import api from '../api'; 
 import { useNavigate, Link } from 'react-router-dom'; 
 
 const validationSchema = yup.object({
@@ -15,19 +15,27 @@ const validationSchema = yup.object({
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleSubmit = async (values) => {
+    setLoading(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+    
     try {
       const response = await api.post('/register', values);
-      console.log('Registration successful', response.data);
       localStorage.setItem('token', response.data.token);
-      navigate('/newsList');
+      setSuccessMessage('Registration successful! Redirecting to news list...');
+      setTimeout(() => navigate('/newsList'), 2000);
     } catch (error) {
-      console.error('Error registering:', error);
+      console.error('Error registering:', error.response ? error.response.data : error.message);
       setErrorMessage('Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,6 +48,7 @@ const Register = () => {
         </Box>
 
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+        {successMessage && <Alert severity="success">{successMessage}</Alert>}
 
         <Formik
           initialValues={{ name: '', email: '', password: '' }}
@@ -67,6 +76,7 @@ const Register = () => {
                 variant="outlined"
                 error={touched.name && Boolean(errors.name)}
                 helperText={touched.name && <ErrorMessage name="name" />}
+                inputProps={{ 'aria-label': 'Name input' }}
               />
 
               <Field
@@ -88,6 +98,7 @@ const Register = () => {
                 variant="outlined"
                 error={touched.email && Boolean(errors.email)}
                 helperText={touched.email && <ErrorMessage name="email" />}
+                inputProps={{ 'aria-label': 'Email input' }}
               />
 
               <Field
@@ -117,10 +128,18 @@ const Register = () => {
                 variant="outlined"
                 error={touched.password && Boolean(errors.password)}
                 helperText={touched.password && <ErrorMessage name="password" />}
+                inputProps={{ 'aria-label': 'Password input' }}
               />
 
-              <Button fullWidth variant="contained" type="submit" color="primary" sx={{ backgroundColor: '#4A00E0', marginTop: 2 }}>
-                Register
+              <Button 
+                fullWidth 
+                variant="contained" 
+                type="submit" 
+                color="primary" 
+                sx={{ backgroundColor: '#4A00E0', marginTop: 2 }} 
+                disabled={loading}
+              >
+                {loading ? 'Registering...' : 'Register'}
               </Button>
             </Form>
           )}

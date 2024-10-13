@@ -1,4 +1,4 @@
-version: '1'
+version: '3.8'
 
 services:
   app:
@@ -11,6 +11,15 @@ services:
       - .:/var/www
     depends_on:
       - db
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=news_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    networks:
+      - laravel_network
 
   db:
     image: mysql:5.7
@@ -22,6 +31,12 @@ services:
       - "3308:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - laravel_network
 
 volumes:
   db_data:
+
+networks:
+  laravel_network:
+    driver: bridge
